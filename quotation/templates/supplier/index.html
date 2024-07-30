@@ -1,0 +1,194 @@
+{% extends 'supplier_main.html' %}
+{% block content %}
+<style>
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+</style>
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p>ውድ ደንበኞቻችን <br>
+            አዋሽ ወይን ኦንላይን የጨረታ ስርዓት የጀመረ ሲሆን በጨረታው ለመሳተፍ BID የሚለውን የመጫረቻ ቁልፍ በመጫን መሳተፍ ይችላሉ፡፡ <br>
+
+            በኦንላይን መርሃ ግብሩ ላይ ተዘርዝረው የሚያገኙአቸው የተለያዩ እቃዎች ጨረታ በመቀበል ላይ ስለሆንን በተዘረዘሩት እቃዎች ላይ መጫረትይችላሉ
+            ተጫራቾች ኦንላይን መርሃ ግብሩ ላይ በተጠየቀው ዝርዝር መሰረት የዋጋ መረጃ ማቅረብ አለባቸው፡፡ በመርሃ ግብሩ ላይ የምታስገቡት ማንኛውም ዋጋ በድርጅታችሁ የተፈረመ እና
+            ማህተም የተደረገ ኦርጂናል ዋጋ ማቅረቢያ ተደርጎ ይቆጠራል :: ጨረታው ከሚዘጋበት ቀን እና ሰዓት በኋላ የገባ የጨረታ ማቅረቢያ ተቀባይነት የለውም፡፡ ጨረታውን ለማስገባት
+            በተሰጠው ጊዜ ገደብ ውስጥ ካስገቡ ተጫራቾች መሃከል አሸናፊውን በኢሜል /በስልክ የምንገልፅ ይሆናል፡፡ <br>
+            ከሰላምታ ጋር <br>
+            የአዋሽ ወይን ግዥ ክፍል <br>
+        </p>
+
+        <label for="checkbox">ይህን አንብቤዋለሁ <input type="checkbox" id="checkbox" name="checkbox"></label><br>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row dash-row">
+
+
+
+
+
+        <div class="col-lg-12">
+            <div class="card spur-card">
+                <div class="card-header">
+                    <div class="spur-card-icon">
+                        <i class="fas fa-donate"></i>
+                    </div>
+                    <div class="spur-card-title"></div>
+                </div>
+                <div class="card-body ">
+
+
+                    <table class="table table-striped table-in-card">
+                        <thead>
+                            <tr>
+                                <th scope="col">NO</th>
+                                
+                                <th scope="col">Description</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Specification</th>
+                                <th scope="col">BOQ</th>
+                                <th scope="col">Deadline Date</th>
+                                <th scope="col">Status</th>
+
+
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for line in quotation_lines %}
+                            <tr>
+                                <th scope="row">{{ line.line_number }}</th>
+                                <th scope="row">{{ line.item_description }}</th>
+
+                                <td>
+                                    {{ line.quantity }}
+
+                                </td>
+                                
+                                <td>
+                                    {% if line.quotation_request.specification  %}
+                                    <a href="{% url 'download_specification' line.quotation_request.id %}"><i
+                                            class="fas fa-download"></i></a>
+                                            {% endif %}
+                                </td>
+
+                                <td>
+                                    {% if line.quotation_request.boq  %}
+                                    <a href="{% url 'download_boq' line.quotation_request.id %}"><i
+                                            class="fas fa-download"></i></a>
+                                            {% endif %}
+
+                                </td>
+
+                                <td>{{ line.quotation_request.deadline_date }}</td>
+                                  {% if line.quotation_request.deadline_date|date:"Y-m-d" >= current_date|date:"Y-m-d" %}
+                                <td><span class="badge badge-pill badge-success">Open</span></td>
+                                    {% else %}
+                                    <td><span class="badge badge-pill badge-danger">Closed</span>
+                                </td>
+                                {% endif %}
+
+
+
+                        
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3">No lines found</td>
+                            </tr>
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+                <a href="{% url 'bid' %}" aria-haspopup='true' aria-expanded='false'>
+
+                    <button style='margin: 20px;' class='btn btn-primary'>Bid</button>
+                </a>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <script type="text/javascript">
+        setTimeout(function() {
+          document.getElementById("alert").style.display = 'none';
+    
+        }, 3000);
+      </script>
+      <script>
+    var modal = document.getElementById("myModal");
+    var span = document.getElementsByClassName("close")[0];
+    var checkbox = document.getElementById("checkbox");
+    
+    window.onload = function() {
+      if (document.cookie.replace(/(?:(?:^|.*;\s*)read\s*\=\s*([^;]*).*$)|^.*$/, "$1") !== "true") {
+        modal.style.display = "block";
+      }
+    }
+    
+    span.onclick = function() {
+      if (checkbox.checked == true){
+        document.cookie = "read=true; expires=Fri, 31 Dec 9999 23:59:59 GMT";
+        modal.style.display = "none";
+      }
+    }
+    
+    checkbox.onclick = function() {
+      if (checkbox.checked == true){
+        document.cookie = "read=true; expires=Fri, 31 Dec 9999 23:59:59 GMT";
+        modal.style.display = "none";
+      }
+    }
+    
+    window.onclick = function(event) {
+      if (event.target == modal && checkbox.checked == true) {
+        document.cookie = "read=true; expires=Fri, 31 Dec 9999 23:59:59 GMT";
+        modal.style.display = "none";
+      }
+    }
+    </script>
+
+
+
+
+
+    {% endblock %}

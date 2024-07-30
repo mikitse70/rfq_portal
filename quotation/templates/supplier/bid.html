@@ -1,0 +1,301 @@
+{% extends 'supplier_main.html' %}
+
+{% block content %}
+<head>
+    <style>
+        .drop-zone {
+      max-width: 100%;
+      height: 200px;
+      padding: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+
+      font-weight: 500;
+      font-size: 20px;
+      cursor: pointer;
+      color: #D3D3D3;
+      border: 1px dashed #6c757d;
+      border-radius: 10px;
+    }
+
+    .drop-zone--over {
+      border-style: solid;
+    }
+
+    .drop-zone__input {
+      display: none;
+    }
+
+    .drop-zone__thumb {
+      width: 100%;
+      height: 100%;
+      border-radius: 10px;
+      overflow: hidden;
+      background-color: #cccccc;
+      background-size: cover;
+      position: relative;
+    }
+
+    .drop-zone__thumb::after {
+      content: attr(data-label);
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 5px 0;
+      color: #ffffff;
+      background: rgba(0, 0, 0, 0.75);
+      font-size: 14px;
+      text-align: center;
+    }
+    </style>
+</head>
+<div class="container-fluid">
+    <div class="row dash-row">
+        <div class="col-lg-12">
+            <div class="card spur-card">
+                <div class="card-header">
+                    <div class="spur-card-icon">
+                        <i class="fas fa-donate"></i>
+                    </div>
+                    <div class="spur-card-title">Bid</div>
+                </div>
+                <div class="card-body">
+                    <form id="myForm" action="" method="post" enctype="multipart/form-data">
+                        <p>Includes</p>
+                        <div class="col-md-3">
+                            <div class="form-check form-check-inline">
+                              <input class="form-check-input" type="radio" name="vat_type" id="vat_type" value="1">
+                              <label class="form-check-label" for="vat_type">
+                                VAT 15%
+                              </label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                              <input class="form-check-input" type="radio" name="vat_type" id="vat_type" value="2">
+                              <label class="form-check-label" for="vat_type">
+                                Tot 2%
+                              </label>
+                            </div>
+                          </div>
+                        {% csrf_token %}
+                        {% for line in quotation_lines %}
+  <input type="hidden" name="quotation_request" value="{{ line.quotation_request.id }}">
+  <div class="form-group col-md-6">
+    <label for="total_price{{ forloop.counter }}">{{ forloop.counter }}. Total Price for {{ line.item_description }}&nbsp;<span style="color:blue;">Quantity needed&nbsp;{{ line.quantity }}</span></label>
+    <div class="row">
+      <div class="col-md-6">
+        <input name="total_price{{ line.line_number }}" type="number" class="form-control" id="total_price{{ forloop.counter }}" placeholder="total price" required>
+      </div>
+  
+    </div>
+  </div>
+{% endfor %}
+                        <div class="form-group">
+                            <label for="exampleFormControlInput1">Payment Term</label>
+                            <textarea name="payment" style="resize:vertical;" class="form-control" rows="8" cols="80" placeholder="payment" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleFormControlInput1">Lead Time (in days)</label>
+                            <input name="lead_time" type="number" class="form-control" id="exampleFormControlInput1" placeholder="lead time" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleFormControlInput1">Delivery Term</label>
+                            <textarea name="delivery_term" style="resize:vertical;" class="form-control" rows="8" cols="80" placeholder="delivery term" required></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="inputGroupFile01">BFI/BOQ</label>
+                                <div class="custom-file">
+                                    <input name="boq" type="file" class="custom-file-input" id="inputGroupFile01" onchange="return fileValidation()" required>
+                                    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="exampleFormControlInput1">Validity Date</label>
+                                <input name="validity_date" type="date" class="form-control" id="exampleFormControlInput1" placeholder="" min="<?php echo $date; ?>" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputGroupFile01">Item image or any other attachments</label>
+                            <div class="custom-file">
+                                <input name="attach" type="file" class="custom-file-input" id="inputGroupFile01" onchange="return fileValidation()" >
+                                <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                            </div>
+                            <!-- <label for="exampleFormControlInput1">Item image or any other attachments</label>
+                            <div class="drop-zone">
+                                <span class="drop-zone__prompt"> <i style="font-size:50px;" class="fas fa-upload"></i><br> Drop file here or click to upload</span>
+                                <input type="file" name="attach" class="drop-zone__input" id="inputGroupFile" onchange="return fileValidationn()">
+                            </div> -->
+                        </div>
+                        <button class="btn btn-primary" name="bid">Bid</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.querySelectorAll(".drop-zone__input").forEach((inputElement) => {
+        const dropZoneElement = inputElement.closest(".drop-zone");
+
+        dropZoneElement.addEventListener("click", (e) => {
+            inputElement.click();
+        });
+
+        inputElement.addEventListener("change", (e) => {
+            if (inputElement.files.length) {
+                updateThumbnail(dropZoneElement, inputElement.files[0]);
+            }
+        });
+
+        dropZoneElement.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            dropZoneElement.classList.add("drop-zone--over");
+        });
+
+        ["dragleave", "dragend"].forEach((type) => {
+            dropZoneElement.addEventListener(type, (e) => {
+                dropZoneElement.classList.remove("drop-zone--over");
+            });
+        });
+
+        dropZoneElement.addEventListener("drop", (e) => {
+            e.preventDefault();
+
+            if (e.dataTransfer.files.length) {
+                inputElement.files = e.dataTransfer.files;
+                updateThumbnail(dropZoneElement, e.dataTransfer.files[0]);
+            }
+
+            dropZoneElement.classList.remove("drop-zone--over");
+        });
+    });
+
+    /**
+     * Updates the thumbnail on a drop zone element.
+     *
+     * @param {HTMLElement} dropZoneElement
+     * @param {File} file
+     */
+    function updateThumbnail(dropZoneElement, file) {
+        let thumbnailElement = dropZoneElement.querySelector(".drop-zone__thumb");
+
+        // First time - remove the prompt
+        if (dropZoneElement.querySelector(".drop-zone__prompt")) {
+            dropZoneElement.querySelector(".drop-zone__prompt").remove();
+        }
+
+        // First time - there is no thumbnail element, so lets create it
+        if (!thumbnailElement) {
+            thumbnailElement = document.createElement("div");
+            thumbnailElement.classList.add("drop-zone__thumb");
+            dropZoneElement.appendChild(thumbnailElement);
+        }
+
+        thumbnailElement.dataset.label = file.name;
+
+        // Show thumbnail for image files
+        if (file.type.startsWith("image/")) {
+            const reader = new FileReader();
+
+            reader.readAsDataURL(file);
+            reader.onload = () => {
+                thumbnailElement.style.backgroundImage = `url('${reader.result}')`;
+            };
+        } else {
+            thumbnailElement.style.backgroundImage = null;
+        }
+    }
+</script>
+
+<script>
+    function fileValidation() {
+        var fileInput = document.getElementById('inputGroupFile01');
+
+        var filePath = fileInput.value;
+
+        // Allowing file type
+        var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif|\.pdf|\.xls|\.xlsx)$/i;
+
+        if (!allowedExtensions.exec(filePath)) {
+            alert('Invalid file type, upload file in pdf, image and excel');
+            fileInput.value = '';
+            return false;
+        }
+    }
+</script>
+
+<script>
+    function fileValidationn() {
+        var fileInput = document.getElementById('inputGroupFile');
+
+        var filePath = fileInput.value;
+
+        // Allowing file type
+        var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif|\.pdf|\.xls|\.xlsx)$/i;
+
+        if (!allowedExtensions.exec(filePath)) {
+            alert('Please upload file in pdf, image and excel formats');
+            fileInput.value = '';
+            return false;
+        }
+    }
+</script>
+
+<script type="text/javascript">
+    setTimeout(function() {
+        document.getElementById("alert").style.display = 'none';
+    }, 3000);
+</script>
+
+
+
+
+
+<script>
+// Get the form elements
+const form = document.getElementById('myForm');
+const inputFields = form.querySelectorAll('input, textarea, select');
+
+// Function to save form data to local storage
+function saveFormData() {
+  const formData = {};
+  inputFields.forEach(field => {
+    formData[field.name] = field.value;
+  });
+  localStorage.setItem('formData', JSON.stringify(formData));
+}
+
+// Function to load form data from local storage
+function loadFormData() {
+  const storedFormData = localStorage.getItem('formData');
+  if (storedFormData) {
+    const formData = JSON.parse(storedFormData);
+    inputFields.forEach(field => {
+      if (formData[field.name]) {
+        field.value = formData[field.name];
+      }
+    });
+  }
+}
+
+// Save form data when the user fills out the form
+inputFields.forEach(field => {
+  field.addEventListener('input', saveFormData);
+});
+
+// Load form data when the page is loaded
+loadFormData();
+
+// Clear local storage when the user submits the form
+form.addEventListener('submit', () => {
+  localStorage.removeItem('formData');
+});
+
+</script>
+{% endblock %}

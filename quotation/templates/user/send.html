@@ -1,0 +1,87 @@
+{% extends 'user_main.html' %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row dash-row">
+        <div class="col-lg-12">
+            <div class="card spur-card">
+                <div class="card-header">
+                    <div class="spur-card-icon">
+                        <i class="fas fa-cart-arrow-down"></i>
+                    </div>
+                    <div class="spur-card-title">Send Request</div>
+                </div>
+                <div class="card-body">
+                    <form id="myForm" action="" method="post">
+                        {% csrf_token %}
+                        <div class="row form-group">
+                            <div class="col-sm-6">
+                                <label class="control-label modal-label">Email</label>
+                                <textarea id="emailInput" type="email" name="email" class="form-control" placeholder="enter email and press enter to add"></textarea>
+                                <input type="hidden" id="emailData" name="emailData">
+                                <div id="emailList"></div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="control-label modal-label">Phone no</label>
+                                <textarea id="telegramInput" type="text" name="tel" class="form-control" placeholder="enter phone no and press enter to add use(09) format"></textarea>
+                                <input type="hidden" id="telegramData" name="telegramData">
+                                <input type="hidden" name="linkid" value="">
+                                <div id="telegramList"></div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-success">Send</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let emails = [];
+    let telegrams = [];
+
+    document.getElementById("emailInput").addEventListener("keyup", function(event) {
+        if (event.key === "Enter") {
+            emails.push(this.value);
+            this.value = "";
+            displayEmails();
+        }
+    });
+
+    document.getElementById("telegramInput").addEventListener("keyup", function(event) {
+        if (event.key === "Enter") {
+            telegrams.push(this.value);
+            this.value = "";
+            displayTelegrams();
+        }
+    });
+
+    function displayEmails() {
+        const emailList = document.getElementById("emailList");
+        emailList.innerHTML = "";
+        emails.forEach((email, index) => {
+            emailList.innerHTML += `<div class="emailItem">${email} <button class="removeButton" onclick="removeEmail(${index})">X</button></div>`;
+        });
+        document.getElementById("emailData").value = JSON.stringify(emails);
+    }
+
+    function displayTelegrams() {
+        const telegramList = document.getElementById("telegramList");
+        telegramList.innerHTML = "";
+        telegrams.forEach((telegram, index) => {
+            telegramList.innerHTML += `<div class="telegramItem">${telegram} <button class="removeButton" onclick="removeTelegram(${index})">X</button></div>`;
+        });
+        document.getElementById("telegramData").value = JSON.stringify(telegrams);
+    }
+
+    function removeEmail(index) {
+        emails.splice(index, 1);
+        displayEmails();
+    }
+
+    function removeTelegram(index) {
+        telegrams.splice(index, 1);
+        displayTelegrams();
+    }
+</script>
+{% endblock %}

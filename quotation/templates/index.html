@@ -1,0 +1,134 @@
+
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <script src="https://cdn.jsdelivr.net/npm/jolty@0.6.2/dist/jolty.esm.min.js"></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:400,600|Open+Sans:400,600,700" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/spur.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
+    <script src="{% static 'js/chart-js-config.js' %}"></script>
+    <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/ico">
+    <title>Login</title>
+    <style>
+        .custom-alert {
+          position: fixed;
+          top: 20px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 300px;
+          padding: 10px;
+          border-radius: 5px;
+          font-size: 16px;
+          font-weight: bold;
+          text-align: center;
+          
+          z-index: 1000;
+        }
+      
+        .alert-success {
+          background-color: #d4edda;
+          color: #30ac4d;
+          border: 1px solid #c3e6cb;
+        }
+      
+        .alert-error {
+          background-color: #f8d7da;
+          color: #d63848;
+          border: 1px solid #f5c6cb;
+        }
+      
+        .alert-info {
+          background-color: #cce5ff;
+          color: #2f82db;
+          border: 1px solid #b8daff;
+        }
+      </style>
+</head>
+
+<body>
+    <div class="form-screen">
+        <a href="index.html" class="spur-logo"><img src="{% static 'images/logo.png' %}" alt=""></a>
+        <div class="card account-dialog">
+
+            <div class="card-header bg-primary text-white"> Sign in to Awash Wine RFQ </div>
+            {% if messages %}
+            {% for message in messages %}
+              <div class="custom-alert alert alert-{{ message.tags }} text-center" role="alert">
+                {{ message }}
+                <button type="button" class="close" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+            {% endfor %}
+          {% endif %}
+            <div class="card-body">
+
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input name="email" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email or phone no" required>
+                    </div>
+                    <div class="form-group">
+                        <input name="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" required>
+                    </div>
+                    {% if error %}
+                        <p style="color: red;">{{ error }}</p>
+                    {% endif %}
+                    <div class="account-dialog-actions">
+                        <button name="login" type="submit" class="btn btn-primary">Sign in</button>
+                        <a class="account-dialog-link" href="{% url 'signup' %}{{ urls }}">Create a new account</a>
+
+                    </div>
+                    <br>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="{% static 'js/spur.js' %}"></script>
+		<script type="text/javascript">
+		setTimeout(function() {
+document.getElementById("alert").style.display = 'none';
+
+}, 3000);
+
+		</script>
+        <script>
+            var urlParams = new URLSearchParams(window.location.search);
+            var id = urlParams.get('id');
+            var checkedLines = urlParams.get('checked_lines');
+            
+            // Now you can store these values in localStorage
+            localStorage.setItem('id', id);
+            localStorage.setItem('checked_lines', checkedLines);
+            console.log(checkedLines)
+            </script>
+      
+              
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      <script>
+        $(document).ready(function() {
+          // Function to fade out alerts after 3 seconds
+          setTimeout(function() {
+            $(".custom-alert").fadeOut("slow");
+          }, 3000);
+      
+          // Function to close alerts when close button is clicked
+          $(".custom-alert .close").click(function() {
+            $(this).parent().fadeOut("slow");
+          });
+        });
+      </script>          
+              
+              
+</body>
+
+</html>

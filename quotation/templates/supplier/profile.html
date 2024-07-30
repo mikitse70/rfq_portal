@@ -1,0 +1,50 @@
+{% extends 'supplier_main.html' %}
+{% block content %}
+<div class="container-fluid">
+
+    <div class="row dash-row">
+
+
+
+
+
+        <div class="col-xl-6">
+            <div class="card spur-card">
+                <div class="card-header">
+                    <div class="spur-card-icon">
+                        <i class="fas fa-screwdriver"></i>
+                    </div>
+                    <div class="spur-card-title">Account Setting</div>
+                </div>
+                <div class="card-body ">
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label  for="exampleFormControlInput1">Old Password</label>
+                            <input name="password" type="password" class="form-control" id="exampleFormControlInput1" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label  for="exampleFormControlInput1">New Password</label>
+                            <input name="new_password" type="password" class="form-control" id="exampleFormControlInput1" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label  for="exampleFormControlInput1">Confirm Password</label>
+                            <input name="confirm_password" type="password" class="form-control" id="exampleFormControlInput1" required>
+                        </div>
+
+                        <button name="update_password" type="submit" class="btn btn-primary">Update</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+</div>
+{% endblock %}

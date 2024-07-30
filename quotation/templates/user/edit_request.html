@@ -1,0 +1,125 @@
+{% extends 'user_main.html' %} {% block content %}
+<div class="container-fluid">
+  <div class="row dash-row">
+    <div class="col-xl-12">
+      <div class="card spur-card">
+        <div class="card-header">
+          <div class="spur-card-icon">
+            <i class="fas fa-cart-arrow-down"></i>
+          </div>
+          <div class="spur-card-title">Edit Quotation Request {{quotation_request.quotation_number}}</div>
+        </div>
+        <div class="card-body">
+          <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="form-row">
+          
+             
+         
+              
+
+
+          
+              
+
+              <div class="form-group col-md-6">
+                <label for="inputZip">Quotation Submission Deadline</label>
+                <input
+                  name="deadline_date"
+                  type="date"
+                  value="{{ quotation_request.deadline_date|date:'Y-m-d' }}"
+                  class="form-control"
+                  id="datepicker"
+                  min="{{ current_date }}"
+                  
+                />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="inputZip">Specification</label>
+                <div class="custom-file">
+                  <input
+                    name="specification"
+                    type="file"
+                    class="custom-file-input"
+                    id="inputGroupFile01"
+                    onchange="return fileValidation()"
+                   
+                  />
+                  <label class="custom-file-label" for="inputGroupFile01"
+                    >Choose file</label
+                  >
+                </div>
+              </div>
+
+              <div class="form-group col-md-6">
+                <label for="inputZip">BOQ</label>
+                <div class="custom-file">
+                  <input
+                    name="boq"
+                    type="file"
+                    class="custom-file-input"
+                    id="inputGroupFile"
+                    onchange="return fileValidationn()"
+                    
+                  />
+                  <label class="custom-file-label" for="inputGroupFile01"
+                    >Choose file</label
+                  >
+                </div>
+              </div>
+            </div>
+
+            <button name="submit" type="submit" class="btn btn-primary">
+              Save
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+   
+  </div>
+
+  <script type="text/javascript">
+    setTimeout(function () {
+      document.getElementById("alert").style.display = "none";
+    }, 3000);
+  </script>
+  <script>
+    function fileValidation() {
+      var fileInput = document.getElementById("inputGroupFile01");
+
+      var filePath = fileInput.value;
+
+      // Allowing file type
+      var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif|\.pdf|\.xls|\.xlsx)$/i;
+
+      if (!allowedExtensions.exec(filePath)) {
+        alert("Invalid file type, upload file in pdf, image and excell");
+        fileInput.value = "";
+        return false;
+      }
+    }
+  </script>
+  <script>
+    function fileValidationn() {
+      var fileInput = document.getElementById("inputGroupFile");
+
+      var filePath = fileInput.value;
+
+      // Allowing file type
+      var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif|\.pdf|\.xls|\.xlsx)$/i;
+
+      if (!allowedExtensions.exec(filePath)) {
+        alert("Invalid file type, upload file in pdf, image and excell");
+        fileInput.value = "";
+        return false;
+      }
+    }
+  </script>
+  {% endblock %}
+</div>

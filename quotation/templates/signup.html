@@ -1,0 +1,265 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.4.1/css/all.css"
+      integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Nunito:400,600|Open+Sans:400,600,700"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.8/css/intlTelInput.css"
+    />
+    <script
+      type="text/javascript"
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.8/js/intlTelInput-jquery.min.js"
+    ></script>
+
+    <link rel="stylesheet" href="{% static 'css/spur.css' %}" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.min.js"></script>
+    <script src="{% static 'js/chart-js-config.js' %}"></script>
+    <link
+      rel="icon"
+      href="{% static 'images/favicon.ico' %}"
+      type="image/ico"
+    />
+    <title>Sign up</title>
+    <style>
+      .custom-alert {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 300px;
+        padding: 10px;
+        border-radius: 5px;
+        font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+        
+        z-index: 1000;
+      }
+    
+      .alert-success {
+        background-color: #d4edda;
+        color: #30ac4d;
+        border: 1px solid #c3e6cb;
+      }
+    
+      .alert-error {
+        background-color: #f8d7da;
+        color: #d63848;
+        border: 1px solid #f5c6cb;
+      }
+    
+      .alert-info {
+        background-color: #cce5ff;
+        color: #2f82db;
+        border: 1px solid #b8daff;
+      }
+    </style>
+    
+  </head>
+
+  <body>
+    <div class="form-screen">
+      <a href="index.html" class="spur-logo"
+        ><img src="{% static 'images/logo.png' %}" alt=""
+      /></a>
+      <div class="card account-dialog">
+        <div class="card-header bg-primary text-white">Create an account</div>
+        {% if messages %}
+        {% for message in messages %}
+          <div class="custom-alert alert alert-{{ message.tags }} text-center" role="alert">
+            {{ message }}
+            <button type="button" class="close" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        {% endfor %}
+      {% endif %}
+      
+        <div class="card-body">
+          <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+              <div class="form-group">
+                <input
+                  type="text"
+                  name="cname"
+                  class="form-control"
+                  id="exampleInputPassword1"
+                  placeholder="company name"
+                  required
+                />
+              </div>
+
+              <input
+                type="text"
+                name="email"
+                class="form-control"
+                id="exampleInputEmail1"
+                aria-describedby="emailHelp"
+                placeholder="Enter email/optional"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <input
+                type="number"
+                id="txtPhone"
+                class="txtbox form-control"
+                placeholder="Phone Number eg 0912345678"
+                name="phone"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <div class="input-group mb-3"></div>
+            </div>
+
+            <div class="form-group">
+              <input
+                type="password"
+                name="password"
+                class="form-control"
+                id="exampleInputPassword1"
+                placeholder="Password"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <input
+                type="password"
+                name="con_password"
+                class="form-control"
+                id="exampleInputPassword1"
+                placeholder="Confirm Password"
+                required
+              />
+            </div>
+
+            <div class="account-dialog-actions">
+              <button name="submit" type="submit" class="btn btn-primary">
+                Sign up
+              </button>
+              <a
+                class="account-dialog-link"
+                href="{% url 'login'%}{{ urls }}"
+                >Already have an account?</a
+              >
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
+    <script src="../js/spur.js"></script>
+    <script type="text/javascript">
+      setTimeout(function () {
+        document.getElementById("alert").style.display = "none";
+      }, 3000);
+    </script>
+    <script>
+      function fileValidation() {
+        var fileInput = document.getElementById("inputGroupFile01");
+
+        // Check the file size (it's in bytes, so convert it to MB)
+        var fileSize = fileInput.files[0].size / 1024 / 1024;
+        if (fileSize > 10) {
+          alert("File size exceeds 10 MB, please upload a smaller file");
+          fileInput.value = "";
+          return false;
+        }
+
+        var filePath = fileInput.value;
+
+        // Allowing file type
+        var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif|\.pdf)$/i;
+
+        if (!allowedExtensions.exec(filePath)) {
+          alert("Invalid file type, upload file in pdf or image");
+          fileInput.value = "";
+          return false;
+        }
+      }
+    </script>
+
+    <script type="text/javascript">
+      $(function () {
+        var code = "+251"; // Assigning value from model.
+        $("#txtPhone").val(code);
+        $("#txtPhone").intlTelInput({
+          autoHideDialCode: true,
+          autoPlaceholder: "ON",
+          dropdownContainer: document.body,
+          formatOnDisplay: true,
+          hiddenInput: "full_number",
+          initialCountry: "auto",
+          nationalMode: true,
+          placeholderNumberType: "MOBILE",
+          preferredCountries: ["US"],
+          separateDialCode: true,
+        });
+      });
+    </script>
+<script>
+var urlParams = new URLSearchParams(window.location.search);
+var id = urlParams.get('id');
+var checkedLines = urlParams.get('checked_lines');
+
+// Now you can store these values in localStorage
+localStorage.setItem('id', id);
+localStorage.setItem('checked_lines', checkedLines);
+
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    // Function to fade out alerts after 3 seconds
+    setTimeout(function() {
+      $(".custom-alert").fadeOut("slow");
+    }, 3000);
+
+    // Function to close alerts when close button is clicked
+    $(".custom-alert .close").click(function() {
+      $(this).parent().fadeOut("slow");
+    });
+  });
+</script>
+
+  </body>
+</html>
